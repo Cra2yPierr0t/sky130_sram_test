@@ -95,7 +95,7 @@ module user_project_wrapper #(
         .clk0   (wb_clk_i       ), // clock
         .csb0   (wbs_stb_i      ), // active low chip select
         .web0   (wbs_we_i       ), // active low write control
-        .wmask0 (4'hf           ), // write mask (1 bit)
+        .wmask0 (la_data_in[3:0]), // write mask (4 bit)
         .addr0  (wbs_adr_i[7:0] ), // addr (10 bit)
         .din0   (wbs_dat_i      ), // data in (8 bit)
         .dout0  (wbs_dat_o      ), // data out (8 bit)
