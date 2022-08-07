@@ -82,41 +82,29 @@ module user_project_wrapper #(
 /* User project is instantiated  here   */
 /*--------------------------------------*/
 
-user_proj_example mprj (
-`ifdef USE_POWER_PINS
-	.vccd1(vccd1),	// User area 1 1.8V power
-	.vssd1(vssd1),	// User area 1 digital ground
-`endif
-
-    .wb_clk_i(wb_clk_i),
-    .wb_rst_i(wb_rst_i),
-
-    // MGMT SoC Wishbone Slave
-
-    .wbs_cyc_i(wbs_cyc_i),
-    .wbs_stb_i(wbs_stb_i),
-    .wbs_we_i(wbs_we_i),
-    .wbs_sel_i(wbs_sel_i),
-    .wbs_adr_i(wbs_adr_i),
-    .wbs_dat_i(wbs_dat_i),
-    .wbs_ack_o(wbs_ack_o),
-    .wbs_dat_o(wbs_dat_o),
-
-    // Logic Analyzer
-
-    .la_data_in(la_data_in),
-    .la_data_out(la_data_out),
-    .la_oenb (la_oenb),
-
-    // IO Pads
-
-    .io_in (io_in),
-    .io_out(io_out),
-    .io_oeb(io_oeb),
-
-    // IRQ
-    .irq(user_irq)
-);
+    wire [7:0]  dout0; // tmp
+    // write    : when web0 = 0, csb0 = 0
+    // read     : when web0 = 1, csb0 = 0, maybe 3 clock delay...?
+    // read     : when csb0 = 0, maybe 3 clock delay...?
+    sky130_sram_1kbyte_1rw1r_32x256_8 rx_mem(
+    `ifdef USE_POWER_PINS
+        .vccd1  (vccd1          ),
+        .vssd1  (vssd1          ),
+    `endif
+        // RW
+        .clk0   (wb_clk_i       ), // clock
+        .csb0   (~wbs_stb_i     ), // active low chip select
+        .web0   (~wbs_we_i      ), // active low write control
+        .wmask0 (4'hf           ), // write mask (1 bit)
+        .addr0  (wbs_adr_i[7:0] ), // addr (10 bit)
+        .din0   (wbs_dat_i      ), // data in (8 bit)
+        .dout0  (wbs_dat_o      ), // data out (8 bit)
+        // R
+        .clk1   (), // clock
+        .csb1   (), // active low chip select
+        .addr1  (), // addr (10 bit)
+        .dout1  ()  // data out (8 bit)
+    );
 
 endmodule	// user_project_wrapper
 
