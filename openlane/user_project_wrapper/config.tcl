@@ -31,6 +31,15 @@ set ::env(DESIGN_NAME) user_project_wrapper
 #section end
 
 # User Configurations
+# save some time
+set ::env(ROUTING_CORES) 8
+set ::env(RUN_KLAYOUT_XOR) 0
+set ::env(RUN_KLAYOUT_DRC) 0
+# no point in running DRC with magic once openram is in because it will find 3M issues
+# try to turn off all DRC checking so the flow completes and use precheck for DRC instead.
+set ::env(MAGIC_DRC_USE_GDS) 0
+set ::env(RUN_MAGIC_DRC) 0
+set ::env(QUIT_ON_MAGIC_DRC) 0
 
 ## Source Verilog Files
 set ::env(VERILOG_FILES) "\
