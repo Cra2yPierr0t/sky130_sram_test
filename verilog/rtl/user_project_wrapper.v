@@ -93,8 +93,8 @@ module user_project_wrapper #(
     `endif
         // RW
         .clk0   (wb_clk_i       ), // clock
-        .csb0   (~wbs_stb_i     ), // active low chip select
-        .web0   (~wbs_we_i      ), // active low write control
+        .csb0   (wbs_stb_i      ), // active low chip select
+        .web0   (wbs_we_i       ), // active low write control
         .wmask0 (4'hf           ), // write mask (1 bit)
         .addr0  (wbs_adr_i[7:0] ), // addr (10 bit)
         .din0   (wbs_dat_i      ), // data in (8 bit)
